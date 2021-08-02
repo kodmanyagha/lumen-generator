@@ -161,7 +161,12 @@ class ControllerMakeCommand extends GeneratorCommand
         $model = trim(str_replace('/', '\\', $model), '\\');
 
         if (!Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
-            $model = $rootNamespace . $model;
+            $modelFolder = '';
+
+            if (file_exists(str_replace('\\', '/', getcwd()) . '/app/Models'))
+                $modelFolder = 'Models\\';
+
+            $model = $rootNamespace . $modelFolder . $model;
         }
 
         return $model;
