@@ -20,12 +20,13 @@ class LumenGeneratorServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
-        'KeyGenerate' => 'command.key.generate',
-        'Tinker' => 'command.tinker',
-        'RouteList' => 'command.route.list',
+        'KeyGenerate'   => 'command.key.generate',
+        'Tinker'        => 'command.tinker',
+        'RouteList'     => 'command.route.list',
         'ClearCompiled' => 'command.clear.compiled',
-        'Optimize' => 'command.optimize',
-        'FactoryMake' => 'command.factory.make',
+        'ClearView'     => 'command.clear.view',
+        'Optimize'      => 'command.optimize',
+        'FactoryMake'   => 'command.factory.make',
     ];
 
     /**
@@ -34,27 +35,27 @@ class LumenGeneratorServiceProvider extends ServiceProvider
      * @var array
      */
     protected $devCommands = [
-        'ConsoleMake' => 'command.console.make',
-        'ControllerMake' => 'command.controller.make',
-        'EventMake' => 'command.event.make',
-        'ExceptionMake' => 'command.exception.make',
-        'RequestMake' => 'command.request.make',
-        'JobMake' => 'command.job.make',
-        'ListenerMake' => 'command.listener.make',
-        'MailMake' => 'command.mail.make',
-        'MiddlewareMake' => 'command.middleware.make',
-        'PipeMake' => 'command.pipe.make',
-        'ModelMake' => 'command.model.make',
-        'PolicyMake' => 'command.policy.make',
-        'ProviderMake' => 'command.provider.make',
-        'Serve' => 'command.serve',
-        'TestMake' => 'command.test.make',
-        'ResourceMake' => 'command.resource.make',
-        'NotificationMake' => 'command.notification.make',
+        'ConsoleMake'       => 'command.console.make',
+        'ControllerMake'    => 'command.controller.make',
+        'EventMake'         => 'command.event.make',
+        'ExceptionMake'     => 'command.exception.make',
+        'RequestMake'       => 'command.request.make',
+        'JobMake'           => 'command.job.make',
+        'ListenerMake'      => 'command.listener.make',
+        'MailMake'          => 'command.mail.make',
+        'MiddlewareMake'    => 'command.middleware.make',
+        'PipeMake'          => 'command.pipe.make',
+        'ModelMake'         => 'command.model.make',
+        'PolicyMake'        => 'command.policy.make',
+        'ProviderMake'      => 'command.provider.make',
+        'Serve'             => 'command.serve',
+        'TestMake'          => 'command.test.make',
+        'ResourceMake'      => 'command.resource.make',
+        'NotificationMake'  => 'command.notification.make',
         'NotificationTable' => 'command.notification.table',
-        'ChannelMake' => 'command.channel.make',
-        'SchemaDump' => 'command.schema.dump',
-        'CastMake' => 'command.cast.make',
+        'ChannelMake'       => 'command.channel.make',
+        'SchemaDump'        => 'command.schema.dump',
+        'CastMake'          => 'command.cast.make',
     ];
 
     /**
@@ -115,12 +116,22 @@ class LumenGeneratorServiceProvider extends ServiceProvider
     /**
      * Register the command.
      */
+    protected function registerClearViewCommand()
+    {
+        $this->app->singleton('command.clear.view', function ($app) {
+            return new Console\ClearViewCommand();
+        });
+    }
+
+    /**
+     * Register the command.
+     */
     protected function registerOptimizeCommand()
     {
         $this->app->singleton('command.optimize', function ($app) {
             $app->configure('compile');
 
-            $app['config']->set('optimizer', require_once(__DIR__.'/config/optimizer.php'));
+            $app['config']->set('optimizer', require_once(__DIR__ . '/config/optimizer.php'));
 
             return new Console\OptimizeCommand(new Composer($app['files']));
         });
